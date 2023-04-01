@@ -11,6 +11,7 @@ start_date = os.environ['START_DATE']
 city = os.environ['CITY']
 birthday = os.environ['BIRTHDAY']
 
+sdk_key = os.environ["SDK_KEY"]
 app_id = os.environ["APP_ID"]
 app_secret = os.environ["APP_SECRET"]
 
@@ -19,10 +20,10 @@ template_id = os.environ["TEMPLATE_ID"]
 
 
 def get_weather():
-  url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
+  url = "https://restapi.amap.com/v3/weather/weatherInfo?extensions=all&key=" + sdk_key + "&city=" + city
   res = requests.get(url).json()
-  weather = res['data']['list'][0]
-  return weather['date'], weather['weather'], math.floor(weather['low']), math.floor(weather['high'])
+  weather = res['data']['forecasts'][0]['casts'][0]
+  return weather['date'], weather['dayweather'], math.floor(weather['nighttemp']), math.floor(weather['daytemp'])
 
 def get_count():
   delta = today - datetime.strptime(start_date, "%Y-%m-%d")
